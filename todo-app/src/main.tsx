@@ -1,8 +1,7 @@
-// src/main.tsx
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import { TaskProvider } from './app/context/TaskContext'; // Импортируем провайдер
+import { TaskProvider } from './app/context/TaskContext';
 
 ReactDOM.render(
     <React.StrictMode>

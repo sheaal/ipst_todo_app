@@ -5,7 +5,7 @@ export interface Task {
     id: string;
     text: string;
     completed: boolean;
-    date: string; // Дата создания задачи
+    date: string;
 }
 
 // Создаем срез для управления состоянием задач
