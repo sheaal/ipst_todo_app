@@ -12,18 +12,18 @@ interface TaskContextType {
     setSelectedDate: (date: string) => void;
 }
 
-const TaskContext = createContext<TaskContextType | undefined>(undefined);
+const TaskContext = createContext<TaskContextType | undefined>(undefined); // создание контекста
 
 export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [tasks, setTasks] = useState<Task[]>(() => {
+    const [tasks, setTasks] = useState<Task[]>(() => { // состояния для хранения задач
         const storedTasks = localStorage.getItem('tasks');
         return storedTasks ? JSON.parse(storedTasks) : [];
     });
 
-    const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]); // установка текущей даты
+    const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
 
     useEffect(() => {
-        localStorage.setItem('tasks', JSON.stringify(tasks));
+        localStorage.setItem('tasks', JSON.stringify(tasks)); // Каждый раз, когда tasks изменяется, обновляется localStorage с новыми задачами.
     }, [tasks]);
 
     const addTask = (task: Task) => setTasks((prev) => [...prev, task]);
