@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTaskContext } from '../../app/context/TaskContext';
-import TaskEditForm from '../TaskEditForm';
-import { Task } from '../../entities/tasks/slice/taskSlice';
+import TaskEditForm from '../TaskEditForm/Editindex';
+import { Task } from '../../entities/tasks/model/types';
 import DatePicker from '../DatePicker';
 import '../../App.css';
 
