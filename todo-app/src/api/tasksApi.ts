@@ -1,6 +1,4 @@
 import { Task } from '../entities/tasks/model/types';
-// import store from '../entities/tasks/store';
-// import { addTask, updateTask, deleteTask } from '../entities/tasks/store'; // Импортируем действия
 
 // Имитация запросов к бэкенду
 

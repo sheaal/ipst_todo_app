@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Task } from '../../model/types'; // Импортируйте тип Task
+import { Task } from '../../model/types';
 import tasksApi from '../../../../api/tasksApi';
 
 export const useTasksQuery = () => {
@@ -15,7 +15,7 @@ export const useCreateTask = () => {
     return useMutation({
         mutationFn: tasksApi.addTask,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['tasks'] }); // Используйте объект с queryKey
+            queryClient.invalidateQueries({ queryKey: ['tasks'] });
         },
     });
 };
@@ -26,7 +26,7 @@ export const useUpdateTask = () => {
     return useMutation<Task, Error, Task>({
         mutationFn: tasksApi.updateTask,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['tasks'] }); // Используйте объект с queryKey
+            queryClient.invalidateQueries({ queryKey: ['tasks'] });
         },
     });
 };
@@ -37,7 +37,7 @@ export const useDeleteTask = () => {
     return useMutation({
         mutationFn: tasksApi.deleteTask,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['tasks'] }); // Используйте объект с queryKey
+            queryClient.invalidateQueries({ queryKey: ['tasks'] });
         },
     });
 };

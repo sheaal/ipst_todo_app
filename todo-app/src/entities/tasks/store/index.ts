@@ -1,8 +1,7 @@
-// src/entities/tasks/store/index.ts
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createContext, useContext } from 'react';
-import { Store } from '@tanstack/store'; // Импортируем Store
-import { Task } from '../model/types'; // Проверьте правильность пути
+import { Store } from '@tanstack/store';
+import { Task } from '../model/types';
 import tasksApi from '../../../api/tasksApi';
 
 // Начальное состояние
@@ -16,7 +15,7 @@ export const useCreateTask = () => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: tasksApi.addTask, // Убедитесь, что это правильная функция
+        mutationFn: tasksApi.addTask,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['tasks'] }); // Обновляем кэш задач
         },
@@ -26,13 +25,13 @@ export const useCreateTask = () => {
 // Определяем редюсеры как функции
 export const setTasks = (tasks: Task[]) => {
     store.setState(() => tasks);
-    localStorage.setItem('tasks', JSON.stringify(tasks)); // Сохраняем в localStorage
+    localStorage.setItem('tasks', JSON.stringify(tasks));
 };
 
 export const addTask = (task: Task) => {
     store.setState(prevState => {
         const updatedTasks = [...prevState, task];
-        localStorage.setItem('tasks', JSON.stringify(updatedTasks)); // Сохраняем в localStorage
+        localStorage.setItem('tasks', JSON.stringify(updatedTasks));
         return updatedTasks;
     });
 };
