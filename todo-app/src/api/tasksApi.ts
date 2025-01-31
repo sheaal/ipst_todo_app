@@ -1,7 +1,6 @@
 import { Task } from '../entities/tasks/model/types';
 
 // Имитация запросов к бэкенду
-
 const tasksApi = {
     fetchTasks: async (): Promise<Task[]> => {
         const storedTasks = localStorage.getItem('tasks');

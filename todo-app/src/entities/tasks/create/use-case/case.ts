@@ -3,7 +3,7 @@ import { Task } from '../../model/types';
 import tasksApi from '../../../../api/tasksApi';
 
 export const useTasksQuery = () => {
-    return useQuery({
+    return useQuery<Task[], Error>({
         queryKey: ['tasks'],
         queryFn: tasksApi.fetchTasks,
     });
@@ -12,10 +12,10 @@ export const useTasksQuery = () => {
 export const useCreateTask = () => {
     const queryClient = useQueryClient();
 
-    return useMutation({
+    return useMutation<Task, Error, Task>({
         mutationFn: tasksApi.addTask,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['tasks'] });
+            queryClient.invalidateQueries({ queryKey: ['tasks'] }); // Обновляем кэш задач
         },
     });
 };
@@ -34,7 +34,7 @@ export const useUpdateTask = () => {
 export const useDeleteTask = () => {
     const queryClient = useQueryClient();
 
-    return useMutation({
+    return useMutation<void, Error, string>({
         mutationFn: tasksApi.deleteTask,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['tasks'] });
