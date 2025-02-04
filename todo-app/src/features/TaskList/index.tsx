@@ -4,54 +4,52 @@ import TaskEditForm from '../TaskEditForm/Editindex';
 import DatePicker from '../DatePicker';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import tasksApi from '../../api/tasksApi';
-import { useTaskContext } from '../../app/context/TaskContext';
+import { useTaskStore } from '../../entities/tasks/store';
+import TaskButtons from '../../components/TaskButtons';
 import '../../App.css';
 
 const TaskList: React.FC = () => {
     const queryClient = useQueryClient();
-    const { tasks } = useTaskContext(); // Получаем задачи из контекста
+    const { tasks } = useTaskStore();
     const [editingTask, setEditingTask] = useState<Task | null>(null);
     const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
 
-    // Получение задач
+    // Запрос для получения задач
     const { isLoading, error } = useQuery<Task[], Error>({
         queryKey: ['tasks'],
         queryFn: tasksApi.fetchTasks,
     });
 
-    // Фильтрация задач по выбранной дате
     const filteredTasks = tasks.filter(task => task.date === selectedDate);
 
-    // Удаление задачи
+    // Мутация для удаления задачи
     const deleteTaskMutation = useMutation({
         mutationFn: (id: string) => tasksApi.deleteTask(id),
         onSuccess: (_, id) => {
-            // Обновляем кэш задач сразу после удаления
+            // Обновляем кэш после успешного удаления
             queryClient.setQueryData(['tasks'], (oldTasks: Task[] | undefined) => 
                 oldTasks ? oldTasks.filter(task => task.id !== id) : []
             );
         }
     });
 
-    // Завершение задачи
+    // Мутация для завершения задачи
     const completeTaskMutation = useMutation({
         mutationFn: async (id: string) => {
             const currentTasks = await tasksApi.fetchTasks();
             const updatedTasks = currentTasks.map(task =>
-                task.id === id ? { ...task, completed: true } : task
+                task.id === id ? { ...task, completed: true } : task // Обновляем статус задачи
             );
             localStorage.setItem('tasks', JSON.stringify(updatedTasks));
-            
-            // Обновляем кэш сразу после выполнения задачи
             queryClient.setQueryData(['tasks'], updatedTasks);
             await tasksApi.updateTask(updatedTasks.find(task => task.id === id)!); // Обновляем задачу через API
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['tasks'] }); // Обновляем кэш задач
+            queryClient.invalidateQueries({ queryKey: ['tasks'] });
         }
     });
 
-    // Обработка редактирования задачи
+    // Функция для обработки редактирования задачи
     const handleEdit = (task: Task) => {
         setEditingTask(task);
     };
@@ -79,26 +77,11 @@ const TaskList: React.FC = () => {
                                 <span style={{ textDecoration: task.completed ? 'line-through' : 'none', color: 'white' }}>
                                     {task.text}
                                 </span>
-                                <div className="ml-4">
-                                    <button 
-                                        onClick={() => deleteTaskMutation.mutate(task.id)} 
-                                        className="bg-[#210e16] text-white px-2 py-1 rounded hover:bg-[#3a1f24] transition mr-2"
-                                    >
-                                        Удалить
-                                    </button>
-                                    <button 
-                                        onClick={() => handleEdit(task)} 
-                                        className="bg-[#210e16] text-white px-2 py-1 rounded hover:bg-[#3a1f24] transition mr-2"
-                                    >
-                                        Редактировать
-                                    </button>
-                                    <button 
-                                        onClick={() => completeTaskMutation.mutate(task.id)} 
-                                        className="bg-[#210e16] text-white px-2 py-1 rounded hover:bg-[#3a1f24] transition"
-                                    >
-                                        Выполнить
-                                    </button>
-                                </div>
+                                <TaskButtons 
+                                    onDelete={() => deleteTaskMutation.mutate(task.id)} 
+                                    onEdit={() => handleEdit(task)} 
+                                    onComplete={() => completeTaskMutation.mutate(task.id)} 
+                                />
                             </li>
                         ))
                     ) : (

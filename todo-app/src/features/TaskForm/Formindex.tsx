@@ -1,25 +1,28 @@
 import React, { useState } from 'react';
 import { Task } from '../../entities/tasks/model/types';
-import { useTaskContext } from '../../app/context/TaskContext';
+import { useTaskStore } from '../../entities/tasks/store';
+import TaskFormButton from '../../components/TaskFormButton';
 import '../../App.css';
 
 const TaskForm: React.FC = () => {
     const [taskText, setTaskText] = useState('');
-    const { addTask } = useTaskContext(); // Используем контекст для добавления задачи
+    const { addTask } = useTaskStore();
 
+    // Функция для обработки отправки формы
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         
+        // Проверяем, что текст задачи не пустой
         if (taskText.trim()) {
             const newTask: Task = {
                 id: Date.now().toString(),
                 text: taskText,
                 completed: false,
-                date: new Date().toISOString().split('T')[0], // Устанавливаем текущую дату
+                date: new Date().toISOString().split('T')[0],
             };
 
-            addTask(newTask); // Добавляем задачу
-            setTaskText(''); // Очищаем текст задачи
+            addTask(newTask);
+            setTaskText('');
         }
     };
 
@@ -33,12 +36,7 @@ const TaskForm: React.FC = () => {
                 required 
                 className="border border-gray-300 p-2 rounded w-full mb-2"
             />
-            <button 
-                type="submit" 
-                className="bg-[#210e16] text-white px-3 py-1 rounded hover:bg-[#3a1f24] transition"
-            >
-                Добавить задачу
-            </button>
+            <TaskFormButton onClick={handleSubmit} />
         </form>
     );
 };

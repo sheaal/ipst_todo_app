@@ -1,22 +1,25 @@
 import React, { useState } from 'react';
 import { Task } from '../../entities/tasks/model/types';
-import { useTaskContext } from '../../app/context/TaskContext';
+import { useTaskStore } from '../../entities/tasks/store';
+import TaskEditFormButton from '../../components/TaskEditFormButton';
 import '../../App.css';
 
+// Определяем интерфейс для пропсов компонента
 interface TaskEditFormProps {
     task: Task;
     onClose: () => void;
 }
 
 const TaskEditForm: React.FC<TaskEditFormProps> = ({ task, onClose }) => {
-    const { updateTask } = useTaskContext();
+    const { updateTask } = useTaskStore();
     const [taskText, setTaskText] = useState(task.text);
 
+    // Функция для обработки отправки формы
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         const updatedTask: Task = { ...task, text: taskText };
-        updateTask(updatedTask); // Обновляем задачу
-        onClose(); // Закрываем форму редактирования
+        updateTask(updatedTask);
+        onClose();
     };
 
     return (
@@ -29,21 +32,10 @@ const TaskEditForm: React.FC<TaskEditFormProps> = ({ task, onClose }) => {
                 className="border border-black-300 p-2 rounded w-full mb-4"
                 placeholder="Введите текст задачи"
             />
-            <div className="flex justify-between">
-                <button 
-                    type="submit" 
-                    className="bg-[#210e16] text-white px-4 py-2 rounded hover:bg-[#3a1f24] transition"
-                >
-                    Сохранить изменения
-                </button>
-                <button 
-                    type="button" 
-                    onClick={onClose} 
-                    className="bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400 transition"
-                >
-                    Отмена
-                </button>
-            </div>
+            <TaskEditFormButton 
+                onSave={handleSubmit} 
+                onCancel={onClose} 
+            />
         </form>
     );
 };
