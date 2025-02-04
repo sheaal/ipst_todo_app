@@ -42,14 +42,16 @@ export const completeTask = (id: string) => {
     });
 };
 
-// Создаем контекст для хранилища
-const TaskStoreContext = createContext<{
+interface TaskStoreContext {
     tasks: Task[];
     addTask: typeof addTask;
     updateTask: typeof updateTask;
     deleteTask: typeof deleteTask;
     completeTask: typeof completeTask;
-} | undefined>(undefined);
+}
+
+const TaskStoreContext = createContext<TaskStoreContext | undefined>(undefined);
+
 
 // Хук для использования хранилища
 export const useTaskStore = () => {

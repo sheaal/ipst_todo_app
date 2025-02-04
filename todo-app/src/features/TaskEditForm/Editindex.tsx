@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Task } from '../../entities/tasks/model/types';
 import { useTaskStore } from '../../entities/tasks/store';
-import TaskEditFormButton from '../../components/TaskEditFormButton';
+import TaskEditFormButton from '../../shared/components/TaskEditFormButton';
 import '../../App.css';
 
 // Определяем интерфейс для пропсов компонента

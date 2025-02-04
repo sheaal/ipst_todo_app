@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Task } from '../../entities/tasks/model/types';
 import { useTaskStore } from '../../entities/tasks/store';
-import TaskFormButton from '../../components/TaskFormButton';
+import TaskFormButton from '../../shared/components/TaskFormButton';
 import '../../App.css';
 
 const TaskForm: React.FC = () => {
